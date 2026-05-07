@@ -9,7 +9,7 @@ and browsers — no GUI framework required.
 ```
  [7=pqrs]  [8=tuv]   [9=wxyz]
  [4=ghi]   [5=jkl]   [6=mno]
- [1=abc]   [2=def]   [3=symbols]
+ [1=symbols]   [2=abc]   [3=def]
  [0=SPC]   [-=DEL]   [/=multitap]  [*=NUM]  [ENTER=commit]
 ```
 
@@ -56,9 +56,9 @@ Default layout — matches physical numpad rows bottom-to-top:
 | Digit | Letters / function | Notes                          |
 |-------|--------------------|--------------------------------|
 | `0`   | space              | always immediate               |
-| `1`   | abc                |                                |
-| `2`   | def                |                                |
-| `3`   | symbols            | `. , ! ? - '` cycling          |
+| `1`   | symbols            | `. , ! ? - '` cycling          |
+| `2`   | abc                |                                |
+| `3`   | def                |                                |
 | `4`   | ghi                |                                |
 | `5`   | jkl                |                                |
 | `6`   | mno                |                                |
