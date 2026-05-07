@@ -1,0 +1,43 @@
+# t9numpad.toml.example
+# Copy to /etc/t9numpad/t9numpad.toml and edit as needed.
+# All values shown are the compiled-in defaults.
+
+# ── Input device ────────────────────────────────────────────────────────────
+# Path to the physical numpad event device.
+# Leave empty ("") to let t9numpad auto-detect by scanning /dev/input/event*.
+device = "/dev/input/event*"
+
+# ── Dictionary ───────────────────────────────────────────────────────────────
+[dict]
+path    = "/usr/share/t9numpad/en.dict"  # word-frequency list
+learned = "/var/lib/t9numpad/learned.dict"  # user-adapted frequencies
+
+# ── T9 engine ─────────────────────────────────────────────────────────────────
+[t9]
+commit_timeout_ms = 1500   # auto-commit if no key pressed for this long (ms)
+multitap          = false  # enable old-style multi-tap (slower but no dict needed)
+flip_layout       = true   # set true if you want abc on 1 instead of 7
+symbol_key        = 1
+
+# ── Key map ───────────────────────────────────────────────────────────────────
+# Customise which letters each numpad digit produces.
+# Standard T9 (ITU E.161) defaults shown below.
+[keymap]
+0 = " "
+1 = ".,!?-'"
+2 = "abc"
+3 = "def"
+4 = "ghi"
+5 = "jkl"
+6 = "mno"
+7 = "pqrs"
+8 = "tuv"
+9 = "wxyz"
+# KP0   → backspace  (hard-coded, not configurable here)
+# KP.   → commit     (hard-coded)
+# ENTER → newline    (hard-coded)
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+[log]
+level = 3      # 0=silent  1=error  2=warn  3=info  4=debug
+file  = ""     # empty = stderr / journald; or give an absolute path

@@ -1,0 +1,23 @@
+# Build output
+build/
+
+# Distribution tarballs
+*.tar.gz
+*.tar.gz.sha256
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled objects (if ever built outside build/)
+*.o
+*.d
+
+# Runtime files
+/tmp/t9numpad_preview
+
+# AUR staging (created by prepare-aur.sh)
+aur/

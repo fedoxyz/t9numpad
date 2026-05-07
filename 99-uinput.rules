@@ -1,0 +1,14 @@
+# 99-uinput.rules
+# Grant the 'input' group write access to /dev/uinput.
+# This avoids running t9numpad as root.
+#
+# Install to /etc/udev/rules.d/ (manual) or
+#            /usr/lib/udev/rules.d/ (package-managed, preferred on Arch).
+#
+# After installing, reload rules:
+#   udevadm control --reload-rules && udevadm trigger
+#
+# Then add your user to the 'input' group and re-login:
+#   sudo usermod -aG input $USER
+
+KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"

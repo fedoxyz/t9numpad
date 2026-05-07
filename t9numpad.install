@@ -1,0 +1,41 @@
+# t9numpad.install — pacman install hooks
+
+post_install() {
+    echo "==> Reloading udev rules …"
+    udevadm control --reload-rules
+    udevadm trigger
+
+    echo "==> uinput module:"
+    if ! lsmod | grep -q uinput; then
+        modprobe uinput 2>/dev/null && echo "    loaded" \
+            || echo "    WARNING: could not load uinput kernel module"
+    else
+        echo "    already loaded"
+    fi
+
+    echo ""
+    echo "==> To enable persistent uinput loading, add to /etc/modules-load.d/:"
+    echo "       echo 'uinput' | sudo tee /etc/modules-load.d/uinput.conf"
+    echo ""
+    echo "==> Add your user to the 'input' group (then re-login):"
+    echo "       sudo usermod -aG input \$USER"
+    echo ""
+    echo "==> Edit the example config and enable the service:"
+    echo "       \$EDITOR /etc/t9numpad/t9numpad.toml"
+    echo "       systemctl enable --now t9numpad.service"
+}
+
+post_upgrade() {
+    post_install
+}
+
+pre_remove() {
+    echo "==> Stopping and disabling t9numpad …"
+    systemctl disable --now t9numpad.service 2>/dev/null || true
+}
+
+post_remove() {
+    echo "==> Reloading udev rules …"
+    udevadm control --reload-rules
+    udevadm trigger
+}

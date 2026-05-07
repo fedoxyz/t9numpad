@@ -1,0 +1,109 @@
+.TH T9NUMPAD 1 "2025" "t9numpad 0.1.0" "User Commands"
+
+.SH NAME
+t9numpad \- T9-style predictive text input daemon for USB numpads
+
+.SH SYNOPSIS
+.B t9numpad
+[\fB\-c\fR \fICONFIG\fR]
+[\fB\-\-version\fR]
+[\fB\-\-help\fR]
+
+.SH DESCRIPTION
+.B t9numpad
+grabs a numpad input device and translates digit key sequences into
+predicted words, emitting them via a virtual keyboard (uinput).
+It is designed to run as a background service and requires no GUI toolkit.
+
+.SH OPTIONS
+.TP
+.BR \-c " " \fICONFIG\fR ", " \fB\-\-config\fR " " \fICONFIG\fR
+Path to the TOML configuration file.
+Defaults to
+.IR /etc/t9numpad/t9numpad.toml .
+
+.TP
+.B \-\-version
+Print version and exit.
+
+.TP
+.B \-\-help
+Print a short usage summary and exit.
+
+.SH NUMPAD LAYOUT
+.nf
+ [KP7=pqrs]  [KP8=tuv]   [KP9=wxyz]
+ [KP4=ghi]   [KP5=jkl]   [KP6=mno]
+ [KP1=abc]   [KP2=def]   [KP3=SPC]
+ [KP0=BSP]   [KP.=commit] [ENTER=↵]
+.fi
+
+.PP
+Press digit keys to enter a sequence, then
+.B KP\-Decimal
+to commit the predicted word.
+.B KP0
+deletes one digit from the current sequence, or emits a backspace when the sequence is empty.
+
+.SH CONFIGURATION
+The configuration file uses a TOML-subset syntax.
+See
+.B t9numpad.toml.example
+for all available options and their defaults.
+
+.SH FILES
+.TP
+.I /etc/t9numpad/t9numpad.toml
+System-wide configuration file.
+.TP
+.I /usr/share/t9numpad/en.dict
+Default English word-frequency dictionary.
+.TP
+.I /var/lib/t9numpad/learned.dict
+User-adapted frequency data written at shutdown.
+
+.SH PERMISSIONS
+.B t9numpad
+needs read access to the input device (typically
+.IR /dev/input/event* )
+and write access to
+.IR /dev/uinput .
+Add your user to the
+.B input
+group, install the bundled udev rule, and run without root:
+.PP
+.nf
+sudo usermod -aG input $USER
+sudo install -Dm644 /usr/lib/udev/rules.d/99-uinput.rules
+udevadm control --reload-rules && udevadm trigger
+.fi
+
+.SH EXAMPLES
+.TP
+Run once manually against a specific device:
+.B t9numpad \-c /etc/t9numpad/t9numpad.toml
+
+.TP
+Enable and start the systemd service:
+.nf
+systemctl enable --now t9numpad.service
+.fi
+
+.SH EXIT STATUS
+.TP
+.B 0
+Clean exit (SIGTERM / SIGINT received).
+.TP
+.B 1
+Fatal error (configuration, device open, uinput setup).
+
+.SH SEE ALSO
+.BR evtest (1),
+.BR udevadm (8),
+.BR systemctl (1)
+
+.SH BUGS
+Report bugs at https://github.com/youruser/t9numpad/issues
+
+.SH LICENSE
+GNU General Public License v2.0 or later.

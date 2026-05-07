@@ -1,0 +1,54 @@
+# Maintainer: Your Name <you@example.com>
+pkgname=t9numpad
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='T9-style predictive text input daemon for USB numpads on Linux'
+arch=('x86_64' 'aarch64' 'armv7h')
+url='https://github.com/youruser/t9numpad'
+license=('GPL-2.0-or-later')
+depends=('glibc' 'libx11')
+makedepends=('gcc' 'make')
+optdepends=('terminus-font: sharper font for the t9preview overlay'
+            'xorg-server: required for t9preview (X11 only)')
+backup=("etc/${pkgname}/${pkgname}.toml")
+install="${pkgname}.install"
+# ---------------------------------------------------------------------------
+# Source — choose ONE of the two source= blocks below:
+# ---------------------------------------------------------------------------
+# A) GitHub release tarball (used once a release tag is pushed):
+#
+# source=("${pkgname}-${pkgver}.tar.gz::https://github.com/youruser/${pkgname}/archive/refs/tags/v${pkgver}.tar.gz")
+# sha256sums=('SKIP')  # replace SKIP with the real checksum before submitting
+#
+# B) Git HEAD (useful for -git variant or development):
+#
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/youruser/${pkgname}/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('SKIP')
+# ---------------------------------------------------------------------------
+prepare() {
+    cd "${pkgname}-${pkgver}"
+}
+
+build() {
+    cd "${pkgname}-${pkgver}"
+    make \
+        CC="${CC:-gcc}" \
+        PREFIX=/usr \
+        CFLAGS="${CFLAGS}" \
+        LDFLAGS="${LDFLAGS}"
+}
+
+check() {
+    cd "${pkgname}-${pkgver}"
+    make check || true
+}
+
+package() {
+    cd "${pkgname}-${pkgver}"
+    make install \
+        DESTDIR="${pkgdir}" \
+        PREFIX=/usr \
+        SYSTEMD_UNIT_DIR=/usr/lib/systemd/system \
+        UDEV_RULES_DIR=/usr/lib/udev/rules.d \
+        VARDIR=/var/lib/${pkgname}
+}
